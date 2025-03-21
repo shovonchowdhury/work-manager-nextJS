@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { connectDB } from "@/helper/db";
 import { User } from "@/models/user";
 import { NextResponse } from "next/server"
@@ -17,30 +18,39 @@ export async function GET() {
     }
   }
 
-export async function POST(req) {
-
-    const {name, email, password, about, profileURL}= await req.json();
-
-    const newUser= new User({
+  export async function POST(req) {
+    const { name, email, password, about, profileURL } = await req.json();
+  
+    try {
+      // Fetch the salt rounds from the environment variable
+      const saltRounds = process.env.BCRYPT_SALT_ROUNDS;
+  
+      // Encrypt the password using bcrypt with the salt rounds from the .env file
+      const salt = await bcrypt.genSalt(parseInt(saltRounds)); // Use async bcrypt.genSalt
+      const hashedPassword =  bcrypt.hashSync(password, salt); // Use async bcrypt.hash
+  
+      const newUser = new User({
         name,
         email,
-        password,
+        password: hashedPassword, // Store the hashed password
         about,
-        profileURL
-    })
-    
-   try{
-        const savedUser = await newUser.save();
-        return NextResponse.json({
-            success : true, message:"User created Successfully!!"
-        }, {status:201})
-
-   }
-   catch(err){
-        return NextResponse.json(
-            {success:false, error: "Failed to creat User"},
-            {status:500}
-        )
-   }
-
-}
+        profileURL,
+      });
+  
+      const savedUser = await newUser.save();
+  
+      return NextResponse.json(
+        {
+          success: true,
+          message: "User created successfully!",
+        },
+        { status: 201 }
+      );
+    } catch (err) {
+      console.error(err);
+      return NextResponse.json(
+        { success: false, error: err.message || "Failed to create user" },
+        { status: 500 }
+      );
+    }
+  }

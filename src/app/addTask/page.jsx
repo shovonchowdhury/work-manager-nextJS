@@ -4,6 +4,7 @@ import loginSvg from "../../../public/undraw_add-document_oqbr1.svg";
 import Image from "next/image";
 import Head from "next/head";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function AddTask() {
   const [task, setTask] = useState({
@@ -13,16 +14,28 @@ export default function AddTask() {
     userId: "67d9d79ebfbf22fb3f799d75",
   });
 
-  const  addTaskHandler =async (e) => {
+  const [addTaskState, setAddTaskState] = useState("Add Task");
+
+  const addTaskHandler = async (e) => {
     e.preventDefault();
 
-    try{
-        const response = await axios.post("http://localhost:3000/api/tasks",task)
-        console.log(response.data)
-    }
-    catch(err)
-    {
-        console.log(err)
+    try {
+      setAddTaskState("Adding...");
+      const response = await axios.post(
+        "http://localhost:3000/api/tasks",
+        task
+      );
+      console.log(response.data);
+      toast.success("Task added successfully!!", {
+        position: "top-center",
+      });
+      setAddTaskState("Add Task");
+    } catch (err) {
+      console.log(err);
+      setAddTaskState("Add Task");
+      toast.error(`Task not added!!`, {
+        position: "top-center",
+      });
     }
   };
 
@@ -49,7 +62,7 @@ export default function AddTask() {
       {/* Heading */}
       <h2 className="text-2xl font-bold mb-6 text-center">Add Your Task</h2>
 
-      <form className="flex flex-col space-y-4">
+      <form onSubmit={addTaskHandler} className="flex flex-col space-y-4">
         {/* Title Input */}
         <div className="flex flex-col">
           <label className="text-sm font-semibold mb-1">Title</label>
@@ -101,9 +114,8 @@ export default function AddTask() {
           <button
             type="submit"
             className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-950 cursor-pointer"
-            onClick={addTaskHandler}
           >
-            Add Task
+            {addTaskState}
           </button>
           <button
             type="button"

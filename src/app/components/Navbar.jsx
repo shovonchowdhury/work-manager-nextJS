@@ -27,10 +27,16 @@ export default function Navbar() {
 
         {/* Right - Auth */}
         <div className="hidden md:flex space-x-4 text-base z-10">
-          <button className="hover:text-gray-300 cursor-pointer">Login</button>
-          <button className="hover:text-gray-300 cursor-pointer">
-            Sign Up
-          </button>
+          <Link href={"/logIn"}>
+            <button className="hover:text-gray-300 cursor-pointer">
+              Login
+            </button>
+          </Link>
+          <Link href={"/signUp"}>
+            <button className="hover:text-gray-300 cursor-pointer">
+              Sign Up
+            </button>
+          </Link>
         </div>
 
         {/* Hamburger Icon */}
@@ -78,18 +84,22 @@ export default function Navbar() {
           >
             Show Tasks
           </Link>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="hover:text-gray-300 text-left"
-          >
-            Login
-          </button>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="hover:text-gray-300 text-left"
-          >
-            Sign Up
-          </button>
+          <Link href={"/logIn"}>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="hover:text-gray-300 text-left"
+            >
+              Login
+            </button>
+          </Link>
+          <Link href={"/signUp"}>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="hover:text-gray-300 text-left"
+            >
+              Sign Up
+            </button>
+          </Link>
         </div>
       )}
     </nav>
