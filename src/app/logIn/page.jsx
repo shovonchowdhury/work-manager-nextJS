@@ -5,8 +5,10 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Image from "next/image";
 import loginSvg from "../../../public/undraw_login_weas.svg"; // Replace with your actual image
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -41,12 +43,16 @@ export default function Login() {
       const res = await axios.post("http://localhost:3000/api/login", user);
       console.log(res.data);
       toast.success("Logged in successfully!!", { position: "top-center" });
+      router.push("/profile/user");
       setLoginState("Log In");
     } catch (err) {
       console.log(err);
-      toast.error("Login failed!" + err.response.data.error._message, {
-        position: "top-center",
-      });
+      toast.error(
+        "Login failed! " + err.response.data.message || err.response.data.error,
+        {
+          position: "top-center",
+        }
+      );
       setLoginState("Log In");
     }
   };
@@ -117,6 +123,18 @@ export default function Login() {
           </button>
         </div>
       </form>
+
+      <div className="mt-4 text-center">
+        <p className="text-sm">
+          Have no account?{" "}
+          <button
+            onClick={() => router.push("/signUp")}
+            className="text-blue-500 hover:underline cursor-pointer"
+          >
+            Sign Up
+          </button>
+        </p>
+      </div>
     </div>
   );
 }

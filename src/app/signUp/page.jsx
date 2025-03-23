@@ -5,8 +5,10 @@ import signupSvg from "../../../public/undraw_sign-up_qamz.svg"; // Replace with
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Signup() {
+  const router = useRouter();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -53,6 +55,7 @@ export default function Signup() {
       console.log(res.data);
       toast.success("Signed up successfully!!", { position: "top-center" });
       setSignupState("Sign Up");
+      router.push("/logIn");
     } catch (err) {
       console.log(err);
       toast.error("Signup failed!" + err.response.data.error._message, {
@@ -154,6 +157,19 @@ export default function Signup() {
           </button>
         </div>
       </form>
+
+      {/* Already a member? Redirect to login */}
+      <div className="mt-4 text-center">
+        <p className="text-sm">
+          Already have an account?{" "}
+          <button
+            onClick={() => router.push("/logIn")}
+            className="text-blue-500 hover:underline cursor-pointer"
+          >
+            Login here
+          </button>
+        </p>
+      </div>
     </div>
   );
 }
