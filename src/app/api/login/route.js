@@ -11,6 +11,7 @@ export const POST = async (req) => {
 
   try {
     const user = await User.findOne({ email });
+
     if (!user) {
       return NextResponse.json({ success: false, message: 'Invalid email or password' }, { status: 400 });
     }
@@ -22,10 +23,16 @@ export const POST = async (req) => {
 
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
-    const response = NextResponse.json({ success: true, message: 'Logged in successfully' },{status: 200});
+    // const userObj = user.toObject(); // Convert to plain object
+    // const { password, ...user2 } = userObj;
+
+    // console.log(user2);
+
+    const response = NextResponse.json({ success: true, message: 'Logged in successfully',user },{status: 200});
 
     response.cookies.set('token', token, {
       httpOnly: true,
+      expires:'1d',
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       path: '/',
@@ -34,6 +41,7 @@ export const POST = async (req) => {
 
     return response;
   } catch (err) {
+    console.log(err);
     return NextResponse.json({ success: false, message: 'Server Error', error: err.message }, { status: 500 });
   }
 };

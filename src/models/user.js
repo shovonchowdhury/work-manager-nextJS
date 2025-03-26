@@ -12,7 +12,8 @@ const UserSchema = new Schema({
     },
     password:{
         type: String,
-        required:[true,"Password Required !!"]
+        required:[true,"Password Required !!"],
+        
     },
     about: String,
     profileURL: String
