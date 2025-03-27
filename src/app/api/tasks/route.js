@@ -1,6 +1,7 @@
 import { connectDB } from "@/helper/db";
 import { Task } from "@/models/task";
 import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken';
 
 await connectDB();
 
@@ -21,18 +22,25 @@ export async function GET() {
 
 export async function POST(req) {
     try {
-      const { title, content, userId } = await req.json();
+      const { title, content, status} = await req.json();
   
       // Validate incoming data
-      if (!title || !content || !userId) {
+      if (!title || !content) {
         return NextResponse.json(
-          { success: false, error: "Title, content, and userId are required" },
+          { success: false, error: "Title and content are required" },
           { status: 400 }
         );
       }
+
+      const token = req.cookies.get("token")?.value;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(decoded);
+      const userId=decoded.id;
+
+
   
       // Create new task
-      const newTask = await Task.create({ title, content, userId });
+      const newTask = await Task.create({ title, content,status, userId});
   
       return NextResponse.json(
         { success: true, task: newTask },

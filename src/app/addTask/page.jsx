@@ -11,7 +11,6 @@ export default function AddTask() {
     title: "",
     content: "",
     status: "",
-    userId: "67d9d79ebfbf22fb3f799d75",
   });
 
   const [addTaskState, setAddTaskState] = useState("Add Task");

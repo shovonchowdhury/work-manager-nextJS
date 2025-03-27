@@ -62,7 +62,7 @@ export default function Navbar() {
             <Link href={"/addTask"} className="hover:text-gray-300">
               Add Tasks
             </Link>
-            <Link href="#" className="hover:text-gray-300">
+            <Link href="/showTask" className="hover:text-gray-300">
               Show Tasks
             </Link>
           </div>
@@ -143,7 +143,7 @@ export default function Navbar() {
             Add Tasks
           </Link>
           <Link
-            href="#"
+            href="/showTask"
             onClick={() => setIsOpen(false)}
             className="block hover:text-gray-300"
           >

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
     try {
-      const { userId } = params;  // Extract userId from URL params
+      const { userId } = await params;  // Extract userId from URL params
   
       // Validate if userId is valid
       if (!mongoose.Types.ObjectId.isValid(userId)) {
