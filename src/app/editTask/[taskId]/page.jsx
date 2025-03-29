@@ -1,109 +1,102 @@
 "use client";
-import React, { useState } from "react";
-import loginSvg from "../../../public/undraw_add-document_oqbr1.svg";
-import Image from "next/image";
-import Head from "next/head";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation"; // ✅ Use next/navigation for App Router
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import Loader from "@/app/components/Loader";
 
-export default function AddTask() {
-  const { user, loading } = useSelector((state) => state.auth);
+export default function EditTask({ params }) {
+  const { user } = useSelector((state) => state.auth);
+  const router = useRouter();
+  const { taskId } = params;
+
   const [task, setTask] = useState({
     title: "",
     content: "",
     status: "",
   });
+  const [addTaskState, setAddTaskState] = useState("Update Task");
+  const [loading, setLoading] = useState(true);
 
-  const [addTaskState, setAddTaskState] = useState("Add Task");
+  // Fetch task details using async/await
+  useEffect(() => {
+    const fetchTask = async () => {
+      if (!taskId) return;
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `/api/tasks/${taskId}`
+        );
+        console.log(response.data);
+        setTask(response.data.task);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to fetch task details.", {
+          position: "top-center",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const addTaskHandler = async (e) => {
+    fetchTask();
+  }, [taskId]);
+
+  // Update task handler with async/await
+  const updateTaskHandler = async (e) => {
     e.preventDefault();
-
     try {
-      setAddTaskState("Adding...");
-      const response = await axios.post(
-        "http://localhost:3000/api/tasks",
-        task
-      );
-      console.log(response.data);
-      toast.success("Task added successfully!! Go to Show Tasks to view.", {
-        position: "top-center",
-      });
-      setAddTaskState("Add Task");
+      setAddTaskState("Updating...");
+      await axios.put(`/api/tasks/${taskId}`, task);
+      toast.success("Task updated successfully!", { position: "top-center" });
+      router.push("/showTask"); // ✅ Navigate after success
     } catch (err) {
-      console.log(err);
-      setAddTaskState("Add Task");
-      toast.error(`Task not added!!`, {
-        position: "top-center",
-      });
+      console.error(err);
+      toast.error("Task not updated!", { position: "top-center" });
+    } finally {
+      setAddTaskState("Update Task");
     }
   };
 
   const clearForm = () => {
-    setTask({
-      ...task,
-      title: "",
-      content: "",
-      status: "",
-    });
+    setTask({ title: "", content: "", status: "" });
   };
 
-  if (!user) {
-    return null; // Prevent render before redirect
-  }
+  if (loading) return <Loader />;
+  if (!user) return null;
 
   return (
     <div className="max-w-xl mx-auto bg-white px-6 pb-4 rounded-xl shadow-md mt-8">
-      {/* Image */}
-      <div className="flex justify-center mb-4">
-        <Image
-          src={loginSvg} // Replace with your actual image path
-          alt=""
-          className="w-1/2 h-1/2 mr-4"
-        />
-      </div>
-
-      {/* Heading */}
-      <h2 className="text-2xl font-bold mb-6 text-center">Add Your Task</h2>
-
-      <form onSubmit={addTaskHandler} className="flex flex-col space-y-4">
-        {/* Title Input */}
+      <h2 className="text-2xl font-bold mb-6 text-center">Edit Your Task</h2>
+      <form onSubmit={updateTaskHandler} className="flex flex-col space-y-4">
         <div className="flex flex-col">
           <label className="text-sm font-semibold mb-1">Title</label>
           <input
             type="text"
             placeholder="Enter task title"
             className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 bg-gray-100"
-            onChange={(event) => {
-              setTask({ ...task, title: event.target.value });
-            }}
+            onChange={(e) => setTask({ ...task, title: e.target.value })}
             value={task.title}
           />
         </div>
 
-        {/* Content Textarea */}
         <div className="flex flex-col">
           <label className="text-sm font-semibold mb-1">Content</label>
           <textarea
             placeholder="Enter task details"
             rows="4"
             className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 bg-gray-100"
-            onChange={(event) => {
-              setTask({ ...task, content: event.target.value });
-            }}
+            onChange={(e) => setTask({ ...task, content: e.target.value })}
             value={task.content}
           ></textarea>
         </div>
 
-        {/* Status Dropdown */}
         <div className="flex flex-col">
           <label className="text-sm font-semibold mb-1">Status</label>
           <select
             className="border rounded-lg px-3 py-2 bg-gray-100"
-            onChange={(event) => {
-              setTask({ ...task, status: event.target.value });
-            }}
+            onChange={(e) => setTask({ ...task, status: e.target.value })}
             value={task.status}
           >
             <option value="" disabled>
@@ -114,7 +107,6 @@ export default function AddTask() {
           </select>
         </div>
 
-        {/* Buttons */}
         <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0 sm:justify-center">
           <button
             type="submit"

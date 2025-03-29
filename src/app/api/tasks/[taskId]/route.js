@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req,{ params }) {
     try {
-      const { taskId } = params;  // Get taskId from URL params
+      const { taskId } = await params;  // Get taskId from URL params
   
       // Validate if taskId is provided
       if (!mongoose.Types.ObjectId.isValid(taskId)) {
@@ -36,7 +36,7 @@ export async function GET(req,{ params }) {
 
   export async function PUT(req, { params }) {
     try {
-      const { taskId } = params;  // Extract taskId from the URL params
+      const { taskId } = await params;  // Extract taskId from the URL params
       const data = await req.json(); // Get the updated data from the request body
   
       // Validate if taskId is valid
@@ -82,7 +82,7 @@ export async function GET(req,{ params }) {
 
   export async function DELETE(req, { params }) {
     try {
-      const { taskId } = params;  // Get taskId from URL params
+      const { taskId } = await params;  // Get taskId from URL params
   
       // Validate if taskId is valid
       if (!mongoose.Types.ObjectId.isValid(taskId)) {

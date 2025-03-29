@@ -43,7 +43,7 @@ export default function Login() {
     dispatch(loginUser(credentials)).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
         toast.success("Logged in successfully!", { position: "top-center" });
-        router.push("/profile/user");
+        router.push("/");
       } else {
         toast.error("Login failed! " + (res.payload?.message || "Try again."), {
           position: "top-center",

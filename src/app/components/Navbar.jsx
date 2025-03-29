@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser, verifyUserLogin } from "@/store/slice/authSlice";
+import { logoutUser } from "@/store/slice/authSlice";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,13 +15,9 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const pathname = usePathname();
 
-  // useEffect(() => {
-  //   dispatch(verifyUserLogin());
-  // }, [dispatch]);
-
   const userLogOutHandle = async () => {
     await dispatch(logoutUser());
-    router.push(pathname);
+    router.replace("/logIn");
   };
 
   if (loading) {
@@ -29,9 +26,16 @@ export default function Navbar() {
     );
   }
 
+  const isActive = (path) =>
+    pathname === path ? "bg-white text-black" : "hover:text-gray-300";
+
   return (
-    <nav className="bg-gray-900 text-white p-4 fixed top-0 left-0 w-full z-50">
-      <div className="flex items-center container mx-auto justify-between relative">
+    <nav
+      className={`bg-gray-900 text-white pt-4 ${
+        !user && "pb-4"
+      }   md:pb-4 fixed top-0 left-0 w-full z-50`}
+    >
+      <div className="flex items-center container px-4 mx-auto justify-between relative">
         {/* Left - Project Name & Hamburger */}
         <div className="flex items-center space-x-4 z-10">
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden">
@@ -55,28 +59,50 @@ export default function Navbar() {
 
         {/* Center - Routes (Hidden on Mobile) */}
         {user && (
-          <div className="hidden md:flex space-x-6 text-base absolute left-1/2 transform -translate-x-1/2">
-            <Link href={"/"} className="hover:text-gray-300">
+          <div className="h-1/2 hidden md:flex items-center space-x-6 text-base absolute left-1/2 transform -translate-x-1/2">
+            <Link
+              href={"/"}
+              className={`px-2 rounded-lg flex items-center ${isActive("/")}`}
+            >
               Home
             </Link>
-            <Link href={"/addTask"} className="hover:text-gray-300">
+            <Link
+              href={"/addTask"}
+              className={`px-2 rounded-lg flex items-center ${isActive(
+                "/addTask"
+              )}`}
+            >
               Add Tasks
             </Link>
-            <Link href="/showTask" className="hover:text-gray-300">
+            <Link
+              href="/showTask"
+              className={`px-2 rounded-lg flex items-center ${isActive(
+                "/showTask"
+              )}`}
+            >
               Show Tasks
             </Link>
           </div>
         )}
 
         {/* Right - Login & Sign Up (Visible on Desktop) */}
-
         {user ? (
           <div className="hidden md:flex items-center space-x-4 text-base z-10">
             <Link href={"/profile/user"}>
               <button className="hover:text-gray-300 cursor-pointer">
-                <div className="flex items-center justify-center w-[30px] h-[30px] bg-black rounded-full">
-                  {user?.name.split(" ")[0].split("")[0]}
-                </div>
+                {user.profileURL ? (
+                  <Image
+                    alt="Profile"
+                    src={user?.profileURL}
+                    width={35}
+                    height={35}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-[35px] h-[35px] bg-black rounded-full">
+                    {user?.name.split(" ")[0].split("")[0]}
+                  </div>
+                )}
               </button>
             </Link>
 
@@ -103,14 +129,23 @@ export default function Navbar() {
         )}
 
         {/* Right - Login (Only on Mobile) */}
-
         {user ? (
           <div className="md:hidden z-10">
             <Link href={"/profile/user"}>
               <button className="hover:text-gray-300 cursor-pointer">
-                <div className="flex items-center justify-center w-[30px] h-[30px] bg-black rounded-full">
-                  {user?.name.split(" ")[0].split("")[0]}
-                </div>
+                {user.profileURL ? (
+                  <Image
+                    alt="Profile"
+                    src={user?.profileURL}
+                    width={35}
+                    height={35}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-[35px] h-[35px] bg-black rounded-full">
+                    {user?.name.split(" ")[0].split("")[0]}
+                  </div>
+                )}
               </button>
             </Link>
           </div>
@@ -127,30 +162,7 @@ export default function Navbar() {
 
       {/* Mobile Dropdown (Left-aligned under Project Name) */}
       {isOpen && (
-        <div className="absolute top-full left-0 w-60 bg-gray-800 p-4 mt-2 md:hidden">
-          <Link
-            href={"/"}
-            onClick={() => setIsOpen(false)}
-            className="block hover:text-gray-300"
-          >
-            Home
-          </Link>
-          <Link
-            href={"/addTask"}
-            onClick={() => setIsOpen(false)}
-            className="block hover:text-gray-300"
-          >
-            Add Tasks
-          </Link>
-          <Link
-            href="/showTask"
-            onClick={() => setIsOpen(false)}
-            className="block hover:text-gray-300"
-          >
-            Show Tasks
-          </Link>
-          <hr className="border-gray-600 my-2" />
-
+        <div className="absolute top-full text-2xl left-0 w-full bg-gray-800 p-4 mt-1 md:hidden">
           {user ? (
             <button
               onClick={() => {
@@ -170,6 +182,35 @@ export default function Navbar() {
               Sign Up
             </Link>
           )}
+        </div>
+      )}
+
+      {user && (
+        <div className="mt-2 flex  md:hidden  text-base ">
+          <Link
+            href={"/"}
+            className={` flex flex-1 py-1 items-center justify-center ${isActive(
+              "/"
+            )}`}
+          >
+            Home
+          </Link>
+          <Link
+            href={"/addTask"}
+            className={`flex flex-1 py-1 items-center justify-center ${isActive(
+              "/addTask"
+            )}`}
+          >
+            Add Tasks
+          </Link>
+          <Link
+            href="/showTask"
+            className={`flex flex-1 py-1 items-center justify-center ${isActive(
+              "/showTask"
+            )}`}
+          >
+            Show Tasks
+          </Link>
         </div>
       )}
     </nav>

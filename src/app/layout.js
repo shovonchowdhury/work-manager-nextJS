@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
             <ToastProvider/>
             <ClientVerifyLogedin/>
             <Navbar/>
-            <main className="pt-20 mb-5 container mx-auto flex-1">{children}</main>
+            <main className="pt-22 mb-5 container mx-auto flex-1">{children}</main>
             <Footer/>
           </body>
         </html>

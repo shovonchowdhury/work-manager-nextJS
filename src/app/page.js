@@ -1,4 +1,5 @@
 import Image from "next/image";
+import HomeContent from "./components/HomeContent";
 
 
 export const metadata = {
@@ -7,7 +8,7 @@ export const metadata = {
 export default function Home() {
   return (
    <div>
-     <div>Main Content</div>
+     <div><HomeContent/></div>
     
    </div>
   );

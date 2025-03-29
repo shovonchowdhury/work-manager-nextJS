@@ -23,7 +23,8 @@ const taskSchema = new Schema({
     userId:{
         type: mongoose.ObjectId,
         required: true
-    }
+    },
+    
 })
 
 export const Task = mongoose.models.tasks || mongoose.model('tasks',taskSchema);

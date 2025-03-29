@@ -16,7 +16,8 @@ const UserSchema = new Schema({
         
     },
     about: String,
-    profileURL: String
+    profileURL: String,
+    
 })
 
 export const User = mongoose.models.users || mongoose.model("users",UserSchema);
