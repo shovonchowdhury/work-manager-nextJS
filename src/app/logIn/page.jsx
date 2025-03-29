@@ -20,15 +20,18 @@ export default function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loging, setLoging] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoging(true);
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(credentials.email)) {
       toast.error("Please enter a valid email address.", {
         position: "top-center",
       });
+      setLoging(false);
       return;
     }
 
@@ -36,6 +39,7 @@ export default function Login() {
       toast.error("Please enter a password.", {
         position: "top-center",
       });
+      setLoging(false);
       return;
     }
 
@@ -44,10 +48,12 @@ export default function Login() {
       if (res.meta.requestStatus === "fulfilled") {
         toast.success("Logged in successfully!", { position: "top-center" });
         router.push("/");
+        setLoging(false);
       } else {
         toast.error("Login failed! " + (res.payload?.message || "Try again."), {
           position: "top-center",
         });
+        setLoging(false);
       }
     });
   };
@@ -111,7 +117,7 @@ export default function Login() {
             className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-950 cursor-pointer"
             disabled={loading}
           >
-            {loading ? "Logging In..." : "Log In"}
+            {loging ? "Logging In..." : "Log In"}
           </button>
           <button
             type="button"
