@@ -15,7 +15,7 @@ export default function UserProfile() {
           alt="Profile Photo"
           width={300}
           height={300}
-          className="rounded-full object-cover"
+          className="w-[350px] h-[350px] rounded-full object-cover"
         />
       ) : (
         <div className="flex items-center justify-center w-40 h-40 bg-gray-300 text-5xl font-bold rounded-full">

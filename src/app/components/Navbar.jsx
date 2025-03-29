@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "@/store/slice/authSlice";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { resetState } from "@/store/slice/taskSlice";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,7 @@ export default function Navbar() {
 
   const userLogOutHandle = async () => {
     await dispatch(logoutUser());
+    dispatch(resetState());
     router.replace("/logIn");
   };
 
@@ -96,7 +98,7 @@ export default function Navbar() {
                     src={user?.profileURL}
                     width={35}
                     height={35}
-                    className="rounded-full"
+                    className="rounded-full w-[35px] h-[35px] object-cover"
                   />
                 ) : (
                   <div className="flex items-center justify-center w-[35px] h-[35px] bg-black rounded-full">
@@ -139,7 +141,7 @@ export default function Navbar() {
                     src={user?.profileURL}
                     width={35}
                     height={35}
-                    className="rounded-full"
+                    className="rounded-full w-[35px] h-[35px] object-cover"
                   />
                 ) : (
                   <div className="flex items-center justify-center w-[35px] h-[35px] bg-black rounded-full">
