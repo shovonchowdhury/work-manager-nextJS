@@ -56,31 +56,36 @@ const Task = ({ task, userId, index }) => {
       >
         <div className="flex justify-between items-start">
           <div className="flex-1 flex flex-col">
-            <h3 className="text-lg font-semibold">{task?.title}</h3>
-            <p className="text-sm break-words overflow-hidden">
-              {task?.content}
-            </p>
+            <h3 className="text-xl font-semibold">{task?.title}</h3>
+            <p className=" mt-2 break-words overflow-hidden">{task?.content}</p>
           </div>
           <div className="flex-shrink-0 px-3 h-[30px] py-1 rounded-full text-sm font-semibold mt-2 md:mt-0 bg-white text-black">
             {task.status === "completed" ? "Completed" : "Pending"}
           </div>
         </div>
 
-        <div className="mt-4 flex justify-end space-x-4">
-          {/* Edit Button with Icon */}
-          <Link href={`/editTask/${task._id}`}>
-            <button className="flex justify-center text-white rounded-full p-2 hover:scale-125 transform transition-all duration-300 cursor-pointer">
-              <FaEdit className="text-xl" />
+        <div className="flex mt-4 items-center justify-between">
+          <Link href={`/showTask/${task._id}`}>
+            <button className="px-2 py-1 md:p-2 border rounded-2xl hover:text-gray-300 cursor-pointer">
+                View Details
             </button>
           </Link>
+          <div className="flex  space-x-4">
+            {/* Edit Button with Icon */}
+            <Link href={`/editTask/${task._id}`}>
+              <button className="flex justify-center text-white rounded-full p-2 hover:scale-125 transform transition-all duration-300 cursor-pointer">
+                <FaEdit className="text-xl" />
+              </button>
+            </Link>
 
-          {/* Delete Button with Icon */}
-          <button
-            onClick={() => onDelete(task._id)}
-            className="text-white rounded-full p-2 hover:scale-125 transform transition-all duration-300 cursor-pointer"
-          >
-            <FaTrashAlt className="text-xl" />
-          </button>
+            {/* Delete Button with Icon */}
+            <button
+              onClick={() => onDelete(task._id)}
+              className="text-white rounded-full p-2 hover:scale-125 transform transition-all duration-300 cursor-pointer"
+            >
+              <FaTrashAlt className="text-xl" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
