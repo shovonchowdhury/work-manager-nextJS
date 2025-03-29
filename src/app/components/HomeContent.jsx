@@ -128,7 +128,7 @@ const HomeContent = () => {
 
       {/* Empty State */}
       {totalTasks === 0 && (
-        <div className="mt-8 text-center text-gray-600">
+        <div className="mt-8 text-center text-red-600">
           <p>
             You don't have any tasks yet. Add your first task to get started!
           </p>

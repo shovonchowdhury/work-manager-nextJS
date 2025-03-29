@@ -22,10 +22,7 @@ export default function AddTask() {
 
     try {
       setAddTaskState("Adding...");
-      const response = await axios.post(
-        "http://localhost:3000/api/tasks",
-        task
-      );
+      const response = await axios.post("/api/tasks", task);
       console.log(response.data);
       toast.success("Task added successfully!! Go to Show Tasks to view.", {
         position: "top-center",

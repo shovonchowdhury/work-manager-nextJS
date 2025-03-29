@@ -26,6 +26,11 @@ const taskSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
+    deleteTask: (state, action) => {
+      const updatedTasks = state.tasks.filter(task => task._id !== action.payload);
+      // If the deleted task was the last one, the UI should still re-render
+      state.tasks = updatedTasks;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -44,5 +49,5 @@ const taskSlice = createSlice({
   },
 });
 
-export const { resetState } = taskSlice.actions;
+export const { resetState, deleteTask } = taskSlice.actions;
 export default taskSlice.reducer;

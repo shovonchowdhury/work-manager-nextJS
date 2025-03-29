@@ -1,5 +1,5 @@
 import Swal from "sweetalert2"; // Import SweetAlert2
-import { fetchTasks } from "@/store/slice/taskSlice";
+import { deleteTask, fetchTasks } from "@/store/slice/taskSlice";
 import axios from "axios";
 import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Import the icons
 import { useDispatch } from "react-redux";
@@ -25,7 +25,8 @@ const Task = ({ task, userId, index }) => {
       if (result.isConfirmed) {
         // If the user confirmed, proceed with deletion
         await axios.delete(`/api/tasks/${taskId}`);
-        dispatch(fetchTasks(userId)); // Refresh tasks list
+        // dispatch(fetchTasks(userId)); // Refresh tasks list
+        dispatch(deleteTask(taskId));
         Swal.fire("Deleted!", "Your task has been deleted.", "success"); // Show success alert
       }
     } catch (err) {
@@ -37,7 +38,11 @@ const Task = ({ task, userId, index }) => {
   return (
     <div className="flex h-full gap-1 md:gap- mx-1 ">
       {/* Serial Number on the Left */}
-      <div className={`${task.status==='completed' ? 'bg-green-700' : 'bg-gray-900'} text-white text-xl border font-semibold rounded-l-lg   min-h-full flex justify-center items-center p-2`}>
+      <div
+        className={`${
+          task.status === "completed" ? "bg-green-700" : "bg-gray-900"
+        } text-white text-xl border font-semibold rounded-l-lg   min-h-full flex justify-center items-center p-2`}
+      >
         {index}
       </div>
 
