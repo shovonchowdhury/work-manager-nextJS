@@ -7,7 +7,7 @@ export default function Footer() {
         {/* Left Section */}
         <div className="flex-1 md:flex-initial">
           <h2 className="text-xl font-bold mb-2">Work Manager</h2>
-          <p className="text-sm text-gray-400">
+          <p className="text-xs md:text-sm text-gray-400">
             Manage your tasks efficiently and stay productive every day.
           </p>
         </div>
@@ -46,7 +46,8 @@ export default function Footer() {
       {/* Divider */}
       <div className="border-t border-gray-700 mt-8 pt-4">
         <p className="text-center text-xs text-gray-500">
-          &copy; {new Date().getFullYear()} Shovon Das Chowdhury. All rights reserved.
+          &copy; {new Date().getFullYear()} Shovon Das Chowdhury. All rights
+          reserved.
         </p>
       </div>
     </footer>
