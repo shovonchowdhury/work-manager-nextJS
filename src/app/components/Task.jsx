@@ -4,11 +4,25 @@ import axios from "axios";
 import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Import the icons
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+import { FaClock, FaExclamationCircle } from "react-icons/fa";
 
 const Task = ({ task, userId, index }) => {
   const dispatch = useDispatch();
 
   // Delete function with SweetAlert confirmation
+
+  const calculateRemainingDays = (deadline) => {
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+
+    // Calculate difference in milliseconds
+    const timeDiff = deadlineDate - today;
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert ms to days
+
+    return daysDiff;
+  };
+
+  const remainingDays = calculateRemainingDays(task.deadline);
   const onDelete = async (taskId) => {
     try {
       // Show SweetAlert confirmation dialog
@@ -59,15 +73,33 @@ const Task = ({ task, userId, index }) => {
             <h3 className="text-xl font-semibold">{task?.title}</h3>
             <p className=" mt-2 break-words overflow-hidden">{task?.content}</p>
           </div>
-          <div className="flex-shrink-0 px-3 h-[30px] py-1 rounded-full text-sm font-semibold mt-2 md:mt-0 bg-white text-black">
-            {task.status === "completed" ? "Completed" : "Pending"}
+          <div className="flex gap-1 md:gap-2 items-center">
+            {task.status === "pending" && (
+              <p
+                className={`text-sm  flex  items-center   px-1 rounded-md text-white`}
+              >
+                {remainingDays > 0 ? (
+                  <>
+                    <FaClock className="mr-1" /> {remainingDays}d
+                  </>
+                ) : (
+                  <>
+                    <FaHourglassEnd className="mr-1" />{" "}
+                    {Math.abs(remainingDays)}d
+                  </>
+                )}
+              </p>
+            )}
+            <div className="flex-shrink-0 px-3 h-[20px] md:h-[30px] md:py-1 rounded-full text-sm font-semibold md:mt-0 bg-white text-black">
+              {task.status === "completed" ? "Completed" : "Pending"}
+            </div>
           </div>
         </div>
 
         <div className="flex mt-4 items-center justify-between">
           <Link href={`/showTask/${task._id}`}>
             <button className="px-2 py-1 md:p-2 border rounded-2xl hover:text-gray-300 cursor-pointer">
-                View Details
+              View Details
             </button>
           </Link>
           <div className="flex  space-x-4">

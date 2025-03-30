@@ -16,7 +16,8 @@ export default function ShowTaskDetails({ params }) {
     title: "",
     content: "",
     status: "",
-    createdAt: "", // Store task creation date
+    createdAt: "",
+    deadline: "", // Required field
   });
 
   const [loading, setLoading] = useState(true);
@@ -92,11 +93,28 @@ export default function ShowTaskDetails({ params }) {
           </p>
         </div>
 
+        {/* Deadline (Required) */}
+        <div>
+          <h3 className="text-xl font-semibold text-gray-900">Deadline:</h3>
+          <p
+            className={`text-lg ${
+              task.status === "pending" ? "text-red-600" : "text-green-600"
+            }  bg-gray-100 px-4 py-2 rounded-lg`}
+          >
+            {new Date(task.deadline).toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        </div>
+
         {/* Edit Button */}
         <div className="flex justify-center">
           <button
             onClick={() => router.push(`/editTask/${taskId}`)}
-            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 focus:outline-none transition duration-300 shadow-md"
+            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 focus:outline-none transition duration-300 shadow-md cursor-pointer"
           >
             <FaEdit />
             Edit Task

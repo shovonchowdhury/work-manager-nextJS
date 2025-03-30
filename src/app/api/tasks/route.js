@@ -22,12 +22,12 @@ export async function GET() {
 
 export async function POST(req) {
     try {
-      const { title, content, status} = await req.json();
+      const { title, content, status, deadline} = await req.json();
   
       // Validate incoming data
-      if (!title || !content) {
+      if (!title || !content || !deadline) {
         return NextResponse.json(
-          { success: false, error: "Title and content are required" },
+          { success: false, error: "Title, content and deadline are required" },
           { status: 400 }
         );
       }
@@ -40,7 +40,7 @@ export async function POST(req) {
 
   
       // Create new task
-      const newTask = await Task.create({ title, content,status, userId});
+      const newTask = await Task.create({ title, content,status,deadline:new Date(deadline), userId});
   
       return NextResponse.json(
         { success: true, task: newTask },

@@ -2,17 +2,17 @@
 import React, { useState } from "react";
 import loginSvg from "../../../public/undraw_add-document_oqbr1.svg";
 import Image from "next/image";
-import Head from "next/head";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
 export default function AddTask() {
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const [task, setTask] = useState({
     title: "",
     content: "",
     status: "",
+    deadline: "", // Added deadline field
   });
 
   const [addTaskState, setAddTaskState] = useState("Add Task");
@@ -39,26 +39,22 @@ export default function AddTask() {
 
   const clearForm = () => {
     setTask({
-      ...task,
       title: "",
       content: "",
       status: "",
+      deadline: "", // Reset deadline too
     });
   };
 
   if (!user) {
-    return null; // Prevent render before redirect
+    return null;
   }
 
   return (
     <div className="max-w-xl mx-auto bg-white px-6 pb-4 rounded-xl shadow-md mt-8">
       {/* Image */}
       <div className="flex justify-center mb-4">
-        <Image
-          src={loginSvg} // Replace with your actual image path
-          alt=""
-          className="w-1/2 h-1/2 mr-4"
-        />
+        <Image src={loginSvg} alt="" className="w-1/2 h-1/2 mr-4" />
       </div>
 
       {/* Heading */}
@@ -72,9 +68,7 @@ export default function AddTask() {
             type="text"
             placeholder="Enter task title"
             className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 bg-gray-100"
-            onChange={(event) => {
-              setTask({ ...task, title: event.target.value });
-            }}
+            onChange={(e) => setTask({ ...task, title: e.target.value })}
             value={task.title}
           />
         </div>
@@ -86,11 +80,20 @@ export default function AddTask() {
             placeholder="Enter task details"
             rows="4"
             className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 bg-gray-100"
-            onChange={(event) => {
-              setTask({ ...task, content: event.target.value });
-            }}
+            onChange={(e) => setTask({ ...task, content: e.target.value })}
             value={task.content}
           ></textarea>
+        </div>
+
+        {/* Deadline Input */}
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold mb-1">Deadline</label>
+          <input
+            type="date"
+            className="border rounded-lg px-3 py-2 bg-gray-100"
+            onChange={(e) => setTask({ ...task, deadline: e.target.value })}
+            value={task.deadline}
+          />
         </div>
 
         {/* Status Dropdown */}
@@ -98,9 +101,7 @@ export default function AddTask() {
           <label className="text-sm font-semibold mb-1">Status</label>
           <select
             className="border rounded-lg px-3 py-2 bg-gray-100"
-            onChange={(event) => {
-              setTask({ ...task, status: event.target.value });
-            }}
+            onChange={(e) => setTask({ ...task, status: e.target.value })}
             value={task.status}
           >
             <option value="" disabled>
