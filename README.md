@@ -1,6 +1,6 @@
 # Work Manager
 
-Work Manager is a task management application that allows users to sign up, add tasks, and track their task completion rate. Built with Next.js, MongoDB, Mongoose, Cloudinary, Tailwind CSS, bcrypt, and JWT, this application provides a smooth user experience for managing tasks and deadlines.
+Work Manager is a task management application that allows users to sign up, add tasks, and track their task completion rate. Built with Next.js, MongoDB, Mongoose, Cloudinary, Tailwind CSS, bcrypt, JWT, and Redux, this application provides a smooth user experience for managing tasks and deadlines.
 
 ## Features
 
@@ -12,11 +12,11 @@ Work Manager is a task management application that allows users to sign up, add 
   - Total tasks completed
   - Task completion rate
   - Recently added tasks
+- **Redux Integration**: The app uses Redux for state management, ensuring smooth task management and authentication handling.
 
 ## Quick Access
 
 For demo purposes, you can use the following credentials:
-
 - **Email**: `user123@gmail.com`
 - **Password**: `1234`
 
@@ -29,6 +29,7 @@ For demo purposes, you can use the following credentials:
 - **Tailwind CSS**: A utility-first CSS framework for styling the app.
 - **bcrypt**: A library for hashing passwords and ensuring secure authentication.
 - **JWT (JSON Web Tokens)**: A method for securely transmitting information between the server and the client.
+- **Redux**: A state management library for managing user authentication and tasks across the application.
 
 ## Installation
 
