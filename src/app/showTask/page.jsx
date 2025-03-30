@@ -14,6 +14,9 @@ export default function ShowTask() {
   const router = useRouter();
   const storedToken = Cookies.get("token");
 
+  // State to track the filter options
+  const [selectedFilter, setSelectedFilter] = React.useState("all");
+
   useEffect(() => {
     if (!user && !storedToken) {
       console.log(storedToken);
@@ -34,7 +37,21 @@ export default function ShowTask() {
     return null; // Prevent render before redirect
   }
 
-  console.log(tasks);
+  // Handle changing the filter
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+  };
+
+  // Filter tasks based on selected filter
+  const filteredTasks = tasks
+    .slice()
+    .reverse()
+    .filter((task) => {
+      if (selectedFilter === "all") return true; // Show all tasks
+      if (selectedFilter === "pending" && task.status === "pending") return true; // Show pending tasks
+      if (selectedFilter === "completed" && task.status === "completed") return true; // Show completed tasks
+      return false;
+    });
 
   return (
     <div className="max-w-2xl md:mx-auto mt-6">
@@ -43,21 +60,55 @@ export default function ShowTask() {
         Your Tasks
       </h2>
 
-      {!tasks || tasks.length === 0 ? (
+      {/* Filter Checkboxes */}
+      <div className="flex justify-center mb-4 space-x-6">
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="all"
+            checked={selectedFilter === "all"}
+            onChange={() => handleFilterChange("all")}
+            className="form-checkbox"
+          />
+          <label htmlFor="all" className="ml-2  text-gray-700">
+            All
+          </label>
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="pending"
+            checked={selectedFilter === "pending"}
+            onChange={() => handleFilterChange("pending")}
+            className="form-checkbox"
+          />
+          <label htmlFor="pending" className="ml-2 text-gray-700">
+            Pending
+          </label>
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="completed"
+            checked={selectedFilter === "completed"}
+            onChange={() => handleFilterChange("completed")}
+            className="form-checkbox"
+          />
+          <label htmlFor="completed" className="ml-2  text-gray-700">
+            Completed
+          </label>
+        </div>
+      </div>
+
+      {!filteredTasks || filteredTasks.length === 0 ? (
         <p className="text-gray-500 text-center mt-4">No tasks available.</p>
       ) : (
         <div className="space-y-4">
-          {tasks
-            .slice()
-            .reverse()
-            .map((task, index) => (
-              <Task
-                key={task._id}
-                task={task}
-                userId={user._id}
-                index={index + 1}
-              />
-            ))}
+          {filteredTasks.map((task, index) => (
+            <Task key={task._id} task={task} userId={user._id} index={index + 1} />
+          ))}
         </div>
       )}
     </div>
