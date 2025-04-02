@@ -1,7 +1,7 @@
 import Swal from "sweetalert2"; // Import SweetAlert2
 import { deleteTask, fetchTasks } from "@/store/slice/taskSlice";
 import axios from "axios";
-import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Import the icons
+import { FaEdit, FaHourglassEnd, FaTrashAlt } from "react-icons/fa"; // Import the icons
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { FaClock, FaExclamationCircle } from "react-icons/fa";
@@ -78,13 +78,13 @@ const Task = ({ task, userId, index }) => {
               <p
                 className={`text-sm  flex  items-center   px-1 rounded-md text-white`}
               >
-                {remainingDays > 0 ? (
+                {remainingDays >= 0 ? (
                   <>
                     <FaClock className="mr-1" /> {remainingDays}d
                   </>
                 ) : (
                   <>
-                    <FaHourglassEnd className="mr-1" />{" "}
+                    <FaExclamationCircle className="mr-1" />{" "}
                     {Math.abs(remainingDays)}d
                   </>
                 )}
