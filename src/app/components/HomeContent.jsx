@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { fetchTasks } from "@/store/slice/taskSlice";
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 const HomeContent = () => {
   const { tasks } = useSelector((state) => state.task);
@@ -47,20 +49,22 @@ const HomeContent = () => {
       </p>
 
       {/* Task Stats */}
-      <div className="text-center mt-6">
+      <div className="text-center mt-6 flex flex-col items-center space-y-2">
+        <div className="w-24 h-24">
+          <CircularProgressbar
+            value={completionRate}
+            text={`${completionRate}%`}
+            styles={buildStyles({
+              textColor: "#1F2937", // gray-800
+              pathColor: "#10B981", // green-500
+              trailColor: "#E5E7EB", // gray-200
+            })}
+          />
+        </div>
         <p className="text-lg text-gray-700">
           <span className="font-semibold text-green-500">{completedTasks}</span>{" "}
           Tasks Completed
         </p>
-        <p className="text-lg text-gray-700">
-          <span className="font-semibold">{completionRate}%</span> Completion
-          Rate
-        </p>
-        <progress
-          value={completionRate}
-          max="100"
-          className="w-full mt-4 h-2 bg-gray-200"
-        ></progress>
       </div>
 
       {/* Quick Access */}

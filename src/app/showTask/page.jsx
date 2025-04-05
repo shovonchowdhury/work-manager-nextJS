@@ -6,6 +6,8 @@ import Task from "../components/Task";
 import { useRouter } from "next/navigation";
 import Loader from "../components/Loader";
 import Cookies from "js-cookie";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function ShowTask() {
   const { tasks, loading } = useSelector((state) => state.task);
@@ -16,6 +18,19 @@ export default function ShowTask() {
 
   // State to track the filter options
   const [selectedFilter, setSelectedFilter] = React.useState("all");
+
+  useEffect(() => {
+    const initAOS = async () => {
+      await import("aos");
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        anchorPlacement: "top-bottom",
+      });
+    };
+    initAOS();
+  }, []);
 
   useEffect(() => {
     if (!user && !storedToken) {
@@ -48,8 +63,10 @@ export default function ShowTask() {
     .reverse()
     .filter((task) => {
       if (selectedFilter === "all") return true; // Show all tasks
-      if (selectedFilter === "pending" && task.status === "pending") return true; // Show pending tasks
-      if (selectedFilter === "completed" && task.status === "completed") return true; // Show completed tasks
+      if (selectedFilter === "pending" && task.status === "pending")
+        return true; // Show pending tasks
+      if (selectedFilter === "completed" && task.status === "completed")
+        return true; // Show completed tasks
       return false;
     });
 
@@ -105,9 +122,14 @@ export default function ShowTask() {
       {!filteredTasks || filteredTasks.length === 0 ? (
         <p className="text-gray-500 text-center mt-4">No tasks available.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 " data-aos="fade-up">
           {filteredTasks.map((task, index) => (
-            <Task key={task._id} task={task} userId={user._id} index={index + 1} />
+            <Task
+              key={task._id}
+              task={task}
+              userId={user._id}
+              index={index + 1}
+            />
           ))}
         </div>
       )}
